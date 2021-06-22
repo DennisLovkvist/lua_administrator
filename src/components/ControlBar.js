@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Common from '../Common';
 import './component.css';
 
+import { CSVLink, CSVDownload } from "react-csv";
+
 class ControlBar extends Component {    
   
     constructor(props) {
@@ -30,7 +32,13 @@ class ControlBar extends Component {
                 
         this.props.FetchSource(this.state.date_start,this.state.date_end);
     };
+    EnterNewCustomerForm = (event) => {
+                
+        this.props.EnterNewCustomerForm();
+    };
     render() {
+
+        
 
         return(
             <div className={"control_bar"}>
@@ -45,6 +53,9 @@ class ControlBar extends Component {
                 <input type="tel" onChange={(e) => this.HandleChangeDateEnd(e)} value={this.state.date_end}></input>
                 
                 <button onClick={(e) => this.HandleFetch(e)}>Hämta</button>
+
+                <CSVLink data={this.props.csvData} separator=";">Exportera</CSVLink>
+                <button onClick={(e) => this.EnterNewCustomerForm(e)}>{"Ny kund"}</button>
 
                 </div>
             </div>

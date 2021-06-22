@@ -27,28 +27,28 @@ class CountingListHeader extends Component {
 
                             <li id={"cell_header_status"}><a href="#" id={"cell_header_status"} onClick={(e) => this.handleClick(e,"status")}>Status</a></li>
                             <li id={"cell_header_customer_name"}><a href="#" id={"cell_header_status"} onClick={(e) => this.handleClick(e,"name")}>Kund</a></li>
-                            <li id={"cell_header_customer_number"}><a href="#" id={"cell_header_status"} onClick={(e) => this.handleClick(e,"number")}>Kundnummer</a></li>
+                            <li id={"cell_header_customer_number"}><a href="#" id={"cell_header_status"} onClick={(e) => this.handleClick(e,"number")}>Kundnr</a></li>
                             <li id={"cell_header_created_date"}><a href="#" id={"cell_header_created_date"} onClick={(e) => this.handleClick(e,"date")}>Datum</a></li>
 
-                            <li id={"cell_header_count_dry"}><p>Pallplats</p></li>
-                            <li id={"cell_header_count_dry"}><p>Pall</p></li>
-                            <li id={"cell_header_count_dry"}><p>Halvpall</p></li>
-                            <li id={"cell_header_count_dry"}><p>Skrymme</p></li>
+                            <li id={"cell_header_count_dry"}><p>PPL</p></li>
+                            <li id={"cell_header_count_dry"}><p>P</p></li>
+                            <li id={"cell_header_count_dry"}><p>HP</p></li>
+                            <li id={"cell_header_count_dry"}><p>S</p></li>
 
-                            <li id={"cell_header_count_cold"}><p>Pallplats</p></li>
-                            <li id={"cell_header_count_cold"}><p>Pall</p></li>
-                            <li id={"cell_header_count_cold"}><p>Halvpall</p></li>
-                            <li id={"cell_header_count_cold"}><p>Skrymme</p></li>
+                            <li id={"cell_header_count_cold"}><p>PPL</p></li>
+                            <li id={"cell_header_count_cold"}><p>P</p></li>
+                            <li id={"cell_header_count_cold"}><p>HP</p></li>
+                            <li id={"cell_header_count_cold"}><p>S</p></li>
 
-                            <li id={"cell_header_count_frozen"}><p>Pallplats</p></li>
-                            <li id={"cell_header_count_frozen"}><p>Pall</p></li>
-                            <li id={"cell_header_count_frozen"}><p>Halvpall</p></li>
-                            <li id={"cell_header_count_frozen"}><p>Skrymme</p></li>
+                            <li id={"cell_header_count_frozen"}><p>PPL</p></li>
+                            <li id={"cell_header_count_frozen"}><p>P</p></li>
+                            <li id={"cell_header_count_frozen"}><p>HP</p></li>
+                            <li id={"cell_header_count_frozen"}><p>S</p></li>
 
-                            <li id={"cell_header_count_global"}><p>Träpall</p></li>
-                            <li id={"cell_header_count_global"}><p>Gråpall</p></li>
+                            <li id={"cell_header_count_global"}><p>Trä</p></li>
+                            <li id={"cell_header_count_global"}><p>Grå</p></li>
                             <li id={"cell_header_count_global"}><p>Chep</p></li>
-                            <li id={"cell_header_count_global"}><p>Rödpall</p></li>
+                            <li id={"cell_header_count_global"}><p>Röd</p></li>
 
                             <li id={"cell_header_count_fill"}></li>
 

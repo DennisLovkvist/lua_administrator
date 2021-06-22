@@ -3,12 +3,14 @@ import Common from '../Common';
 import CountingList from './CountingList';
 import CountingListHeader from './CountingListHeader';
 import ControlBar from './ControlBar';
+import NewCustomerForm from './NewCustomerForm';
 import './component.css';
+
+
 
 class CountingsOverviewPage extends Component {
     
-  
-  constructor(props) {
+    constructor(props) {
     super(props);
     this.state = {
       countings_source: [],
@@ -16,11 +18,13 @@ class CountingsOverviewPage extends Component {
       statuses:[],
       search_term:"",
       sort_desc:true,
-      current_category:"number"
+      current_category:"name",
+      mode:"overview"
     }
 }
 Sort = (category) => {
 
+  return;
   this.setState({current_category:category});
   var countings = this.state.countings.slice();
 
@@ -36,6 +40,9 @@ Sort = (category) => {
           break;
       case "date":
         countings.sort(function(a,b){return (a.created_date < b.created_date) ? n[0]:n[1];});
+          break;
+      case "name":
+        countings.sort(function(a,b){return (a.customer_name.toLowerCase() < b.customer_name.toLowerCase()) ? n[0]:n[1];});
           break;
       default:
         countings.sort(function(a,b){return (a.customer_name.toLowerCase() < b.customer_name.toLowerCase()) ? n[0]:n[1];});
@@ -156,7 +163,6 @@ ChangeStatus = (counting_control_id) => {
         
         for(var j = 0; j < this.state.statuses.length;j++)
         {
-          console.log(this.state.statuses[j].id  + "===" + status_id);
             if(this.state.statuses[j].id === status_id)
             {
               countings_source[index].status_name = this.state.statuses[j].name;
@@ -188,23 +194,13 @@ ChangeStatus = (counting_control_id) => {
         };
 
         fetch('http://' + process.env.REACT_APP_WEB_SERVER_IP + ':8081/UpdateCountingControlById/'+countings_source[index].counting_control_id, request_options).then();
-
-
-
-
-
-
       }
       
       
 
 }
 UpdateCount = (index,counting_control_id, department, pallet_type, value) => {
- 
-      
-
-
-
+       
       for(var i = 0;i < this.state.countings_source.length;i++)
       {
           if(this.state.countings_source[i].counting_control_id === counting_control_id)
@@ -237,20 +233,71 @@ UpdateCount = (index,counting_control_id, department, pallet_type, value) => {
 
       
 }
-render() {
-  
- 
-  return (
-    <div>     
-      <div id="banner">
-        <h1>LUA Administrator</h1>
-      </div>
-      <ControlBar Filter={this.Filter} FetchSource={this.FetchSource} ></ControlBar>
 
-      <CountingListHeader Sort={this.Sort}/>
-      <CountingList countings={this.state.countings} UpdateCount={this.UpdateCount} ChangeStatus={this.ChangeStatus}/>
-    </div>
-  );
+Export()
+{
+    var output = [this.state.countings_source.length+1];
+    output[0] = ["Kund","Kundnr","Datum","Status","PPLD","PD","HPD","SD","PPLK","PK","HPK","SK","PPLF","PF","HPF","SF","Trä","Grå","Chep","Röd"];
+    var index = 1;
+    for(var i = 0;i < this.state.countings_source.length;i++)
+    {
+        var src = this.state.countings_source[i];        
+
+        output[index] = [ src.customer_name,src.customer_number,src.created_date,src.status_name,
+                          src.counts[0],src.counts[1],src.counts[2],src.counts[3],
+                          src.counts[4],src.counts[5],src.counts[6],src.counts[7],
+                          src.counts[8],src.counts[9], src.counts[10],src.counts[11],
+                          src.counts[12],src.counts[13],src.counts[14],src.counts[15]];   
+
+        index ++;         
+        
+    }
+    
+
+    return output;
+}
+ExitNewCustomerForm = () => {
+
+  this.setState({mode : "overview"}); 
+}
+EnterNewCustomerForm = () => {
+
+  this.setState({mode : "new_customer"}); 
+}
+
+render() {
+ 
+    const csvData = this.Export();
+  
+    if(this.state.mode == "overview")
+    {
+      return (
+          <div>           
+
+          <div id="banner">
+            <h1>LUA Administrator</h1>
+          </div>
+
+          <ControlBar csvData={csvData} EnterNewCustomerForm={this.EnterNewCustomerForm} Filter={this.Filter} FetchSource={this.FetchSource} ></ControlBar>
+
+          <CountingListHeader Sort={this.Sort}/>
+
+          
+
+
+          <CountingList countings={this.state.countings} UpdateCount={this.UpdateCount} ChangeStatus={this.ChangeStatus}/>
+        </div>
+      );
+    }
+    if(this.state.mode == "new_customer")
+    {
+        return (
+          <div>  
+            <NewCustomerForm ExitNewCustomerForm={this.ExitNewCustomerForm}/>
+          </div>
+      );
+    }
+  
 }
 
   
