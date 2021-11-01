@@ -8,6 +8,10 @@ module.exports =
     {
         return GetCurrentDateString();
     },
+    GetCurrentTimeString: function ()
+    {
+        return GetCurrentTimeString();
+    },
     StringLimitLength: function (str,max_length)
     {
         return StringLimitLength(str,max_length);
@@ -47,6 +51,17 @@ function GetCurrentDateString(){
     var d = today.getDate();
 
     var date = y + '-' + ((m < 10) ? "0":"") + m + '-' + ((d < 10) ? "0":"") + d;
+
+    return date.toString();
+}
+function GetCurrentTimeString(){
+    
+    var today = new Date();    
+
+    var h = today.getHours();
+    var m = today.getMinutes();
+
+    var date = ((h < 10) ? "0":"") + h + ":" + ((m < 10) ? "0":"") + m;
 
     return date.toString();
 }

@@ -19,14 +19,14 @@ class CountingListHeader extends Component {
                             <li id={"cell_header_cold"}>Kylt</li>
                             <li id={"cell_header_frozen"}>Fryst</li>
                             <li id={"cell_header_global"}>Global</li>
-
+                            <li id={"cell_header_date_control"}>Tid</li>
                     </div>
                 </ul>
                 <ul id={"counting_view_list"}>
                     <div className={"counting_view"}>
 
                             <li id={"cell_header_status"}><a href="#" id={"cell_header_status"} onClick={(e) => this.handleClick(e,"status")}>Status</a></li>
-                            <li id={"cell_header_customer_name"}><a href="#" id={"cell_header_status"} onClick={(e) => this.handleClick(e,"name")}>Kund</a></li>
+                            <li id={"cell_header_customer_name"}><a href="#" id={"cell_header_customer_name"} onClick={(e) => this.handleClick(e,"name")}>Kund</a></li>
                             <li id={"cell_header_customer_number"}><a href="#" id={"cell_header_status"} onClick={(e) => this.handleClick(e,"number")}>Kundnr</a></li>
                             <li id={"cell_header_created_date"}><a href="#" id={"cell_header_created_date"} onClick={(e) => this.handleClick(e,"date")}>Datum</a></li>
 
@@ -48,9 +48,12 @@ class CountingListHeader extends Component {
                             <li id={"cell_header_count_global"}><p>Trä</p></li>
                             <li id={"cell_header_count_global"}><p>Grå</p></li>
                             <li id={"cell_header_count_global"}><p>Chep</p></li>
-                            <li id={"cell_header_count_global"}><p>Röd</p></li>
+                            <li id={"cell_header_count_global"}><p>Röd</p></li>  
 
-                            <li id={"cell_header_count_fill"}></li>
+                            <li id={"cell_header_count_date_control"}><p>Ankomst</p></li>
+                            <li id={"cell_header_count_date_control"}><p>Lastning påbörjad</p></li>
+                            <li id={"cell_header_count_date_control"}><p>Lastning avslutad</p></li>
+                            <li id={"cell_header_count_date_control"}><p>Avgång</p></li>                            
 
                     </div>
                 </ul>

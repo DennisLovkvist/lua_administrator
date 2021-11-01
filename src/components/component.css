@@ -24,15 +24,20 @@
     --width-header-dry:1px;
     --padding-top-cell-count:5px;
 
-    --count-input-width:32px;
-    --count-input-margin-left:12px; 
+    --padding-left: 8px;
 
-    --header-customer-number-width:115px;
-    --header-customer-name-width:180px;
+    --count-input-width:44px;
+    --count-input-margin-left:4px; 
+    
+    --count-input-bg-color: #eeeeee;
+
+    --header-customer-number-width:90px;
+    --header-customer-name-width:100px;
     --header-status-width:128px;
-    --header-date-width:96px;
+    --header-date-width:116px;
+    --header-date-control-width:550px;
 
-    --cell-complete-width: 1447px; 
+    --cell-complete-width: 1888px; 
 
 
     --cell-header-store-width: calc(var(--header-customer-number-width) + var(--header-customer-name-width) + var(--header-status-width) + var(--header-date-width)); 
@@ -63,7 +68,7 @@
 }
 .control_bar div {
     background-color:#bebebe;
-    width: 1446px;
+    width: var(--cell-complete-width);
     height: 48px;
 }
 .control_bar h3 {
@@ -119,7 +124,7 @@
     height: 32px;
     margin-top: -5px;
     padding-top: 5px;
-    padding-left: 32px;
+    padding-left: var(--padding-left);
     text-align: center;
 }
 #cell_customer_name{
@@ -128,8 +133,10 @@
     background-color: var(--color-primary);
     margin-top: -5px;
     padding-top: 5px;
-    text-align: center;
-    font-size: small;
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 #cell_customer_name p{
 
@@ -152,21 +159,22 @@
     margin-top: -5px;
     padding-top: 5px;
     text-align: center;
+    font-size: 13px;;
 }
 #cell_header_status{
     width: var(--header-status-width);
     text-decoration: underline;  
     background-color: var(--color-primary);
     color: var(--color-text-dark);
-    text-align: center;
-    padding-left: 32px;
+    
+    padding-left: var(--padding-left);
 }
 #cell_header_customer_name{
     width: var(--header-customer-name-width);
     text-decoration: underline; 
     background-color: var(--color-primary);
     color: var(--color-text-dark);
-    text-align: center;
+    text-align: left;
 }
 #cell_header_customer_number{
     width: var(--header-customer-number-width);
@@ -252,6 +260,16 @@
     
     color: var(--color-text-dark);
 }
+#cell_header_count_date_control{
+    width: calc(var(--header-date-control-width)/4);   
+    padding-left:var(--padding-cell-count);
+    padding-right:var(--padding-cell-count);
+    margin-top: var(--margin-top-cell-count);
+    text-align: center;
+    text-decoration: underline;      
+    background-color: var(--color-frozen-primary);
+    color: var(--color-text-dark);
+}
 #cell_header_count_fill{
     width: 523px;  
     padding-left:var(--padding-cell-count);
@@ -272,7 +290,7 @@
     text-align: center;
     color: var(--color-text-dark);
     font-weight: bold;
-    padding-left: 32px;
+    padding-left: var(--padding-left);
     padding-bottom: 5px;
 }
 #cell_header_dry{
@@ -312,6 +330,15 @@
     font-weight: bold;
     padding-bottom: 5px;
     
+}
+#cell_header_date_control{
+    width: var(--header-date-control-width);   
+    text-decoration: underline;   
+    background-color: var(--color-frozen-primary);
+    text-align: center;
+    color: var(--color-text-dark);
+    font-weight: bold;
+    padding-bottom: 5px;
 }
 
 #cell_count_dry{
@@ -355,6 +382,47 @@
     width: var(--width-cell-count);
     height: var(--height-cell-count); 
 }
+#cell_date_control{
+
+    background-color: var(--color-frozen-primary);    
+    margin-top: var(--margin-top-cell-count);
+    padding-top: var(--padding-top-cell-count);
+    padding-left:var(--padding-cell-count);
+    padding-right:var(--padding-cell-count);
+    width: calc(var(--header-date-control-width)/4); 
+    height: var(--height-cell-count);
+    
+}
+
+#cell_date_control p{
+
+    margin-top: 2px;
+   font-size: 13px;
+   padding-left:4px;
+   text-align: center;
+}
+
+#cell_date_control button{
+
+    display: inline-block;
+    font: bold 11px Arial;
+    margin-left: 16px;
+    margin-right: 16px;
+    display: inline-block;
+    border:none;
+   width: 110px;
+    padding: 4px 6px 4px 6px;
+}
+
+#cell_date_control button:hover{
+
+    background-color: #cfcfcf;
+}
+#cell_date_control button:active{
+
+    background-color: #cfcfcf;
+    border: 1px solid #333333;
+}
 #cell_date{
 
     background-color:var(--color-global-primary);
@@ -384,6 +452,22 @@
     width: 42px;
 }
 
+#customer_info_uncounted {
+
+    color: #000000;
+}
+#customer_info_uncounted_late {
+
+    color: #cf0000;
+}
+#customer_info_counted {
+
+    color: #fffd6c;
+}
+#customer_info_done {
+
+    color: #207a05;
+}
 
 #cell_count_fill{
 
@@ -395,12 +479,44 @@
     width: 522px;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+#cell_count_dry input[type=number]{
+
+    width: var(--count-input-width);
+    text-align: center;
+    margin-left: var(--count-input-margin-left);
+    background-color: var(--count-input-bg-color);
+    outline: none;
+    border: 0px;  
+}
+#cell_count_cold input[type=number]{
+
+    width: var(--count-input-width);
+    text-align: center;
+    margin-left: var(--count-input-margin-left);
+    background-color: var(--count-input-bg-color);
+    outline: none;
+    border: 0px;  
+}
+#cell_count_frozen input[type=number]{
+
+    width: var(--count-input-width);
+    text-align: center;
+    margin-left: var(--count-input-margin-left);
+    background-color: var(--count-input-bg-color);
+    outline: none;
+    border: 0px;  
+}
 
 #cell_count_dry input[type=tel]{
 
     width: var(--count-input-width);
     text-align: center;
     margin-left: var(--count-input-margin-left);
+    background-color: var(--count-input-bg-color);
     outline: none;
     border: 0px;  
 }
@@ -409,6 +525,7 @@
     width: var(--count-input-width);
     text-align: center;
     margin-left: var(--count-input-margin-left);
+    background-color: var(--count-input-bg-color);
     outline: none;
     border: 0px;  
 }
@@ -417,6 +534,7 @@
     width: var(--count-input-width);
     text-align: center;
     margin-left: var(--count-input-margin-left);
+    background-color: var(--count-input-bg-color);
     outline: none;
     border: 0px;  
 }
@@ -425,6 +543,7 @@
     width: var(--count-input-width);
     text-align: center;
     margin-left: var(--count-input-margin-left);
+    background-color: var(--count-input-bg-color);
     outline: none;
     border: 0px;  
 }

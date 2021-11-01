@@ -13,6 +13,7 @@ class CountingList extends Component {
                     <div className={"counting_view"} >
                         <CountingListItem
                         counting={counting}
+                        statuses={this.props.statuses}
                         UpdateCount={this.props.UpdateCount}
                         ChangeStatus={this.props.ChangeStatus}
                         />
@@ -28,7 +29,8 @@ class CountingList extends Component {
 
 CountingList.propTypes = {
 
-    countings: PropTypes.array.isRequired
+    countings: PropTypes.array.isRequired,
+    statuses: PropTypes.array.isRequired
 }
 
 export default CountingList;

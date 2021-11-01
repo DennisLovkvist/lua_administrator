@@ -27,7 +27,14 @@
     width:96px;border: none; 
 
   }
-  
+  .status-dropdown-content-inactive {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    width: 96px;
+    box-shadow: 0px 8px 8px 0px rgba(0,0,0,0.2);
+    z-index: 1;border: none; 
+  } 
   .status-dropdown-content {
     display: none;
     position: absolute;

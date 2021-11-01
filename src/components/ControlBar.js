@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Common from '../Common';
 import './component.css';
 
-import { CSVLink, CSVDownload } from "react-csv";
+import { CSVLink} from "react-csv";
 
 class ControlBar extends Component {    
   
