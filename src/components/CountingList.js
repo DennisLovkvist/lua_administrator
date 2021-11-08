@@ -16,6 +16,8 @@ class CountingList extends Component {
                         statuses={this.props.statuses}
                         UpdateCount={this.props.UpdateCount}
                         ChangeStatus={this.props.ChangeStatus}
+                        AddTimeRapport={this.props.AddTimeRapport} 
+                        RemoveTimeRapport={this.props.RemoveTimeRapport}
                         />
                     </div>
                 </ul>

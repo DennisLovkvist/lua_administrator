@@ -20,6 +20,7 @@ class CountingListHeader extends Component {
                             <li id={"cell_header_frozen"}>Fryst</li>
                             <li id={"cell_header_global"}>Global</li>
                             <li id={"cell_header_date_control"}>Tid</li>
+                            <li id={"cell_header_date_control_add"}>{"+"}</li>
                     </div>
                 </ul>
                 <ul id={"counting_view_list"}>
@@ -53,7 +54,8 @@ class CountingListHeader extends Component {
                             <li id={"cell_header_count_date_control"}><p>Ankomst</p></li>
                             <li id={"cell_header_count_date_control"}><p>Lastning påbörjad</p></li>
                             <li id={"cell_header_count_date_control"}><p>Lastning avslutad</p></li>
-                            <li id={"cell_header_count_date_control"}><p>Avgång</p></li>                            
+                            <li id={"cell_header_count_date_control"}><p>Avgång</p></li>  
+                            <li id={"cell_header_count_date_control_add"}><p>{"+"}</p></li>                            
 
                     </div>
                 </ul>
