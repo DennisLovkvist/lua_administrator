@@ -36,10 +36,14 @@ class ControlBar extends Component {
                 
         this.props.EnterNewCustomerForm();
     };
-    HandleCheckbox = (event,index) => {
+    ChangeRouteFilter = (event,index) => {
                 
         this.props.ChangeRouteFilter(index, event.target.checked);
         
+    };
+    ChangeOmitCompletedPosts = (event) => {
+                
+        this.props.ChangeOmitCompletedPosts(event.target.checked);        
     };
     render() {
 
@@ -48,20 +52,40 @@ class ControlBar extends Component {
         return(
             <div className={"control_bar"}>
                 <div>
-                    <div className={"control_bar_default"}>
+                   {/*} <div className={"control_bar_default"}>
                         <h3>Filter</h3>
                         <input type="tel" onChange={(e) => this.HandleChange(e)} value={this.state.search_term}></input>                        
-                    </div>
+        </div>*/}
 
                     <div className={"control_bar_routes"}>
+
+                        <h4>Filter</h4>
+                        <input type="tel" onChange={(e) => this.HandleChange(e)} value={this.state.search_term}></input>  
+
                         <h4>Tumba</h4>
-                        <input type="checkbox" id={"checkbox_tumba"} defaultChecked={true} onClick={(e) => this.HandleCheckbox(e,0)}></input>
+
+                        <label class="checkbox_container">
+                        <input type="checkbox" defaultChecked={true} onClick={(e) => this.ChangeRouteFilter(e,0)}></input>
+                        <span class="checkmark"></span>
+                        </label>
                         
                         <h4>A-tur</h4>
-                        <input type="checkbox" id={"checkbox_tumba"} defaultChecked={true} onClick={(e) => this.HandleCheckbox(e,1)}></input>
+                        <label class="checkbox_container">
+                        <input type="checkbox" defaultChecked={true} onClick={(e) => this.ChangeRouteFilter(e,1)}></input>
+                        <span class="checkmark"></span>
+                        </label>
 
                         <h4>E-tur</h4>
-                        <input type="checkbox" id={"checkbox_tumba"} defaultChecked={true} onClick={(e) => this.HandleCheckbox(e,2)}></input>
+                        <label class="checkbox_container">
+                        <input type="checkbox" defaultChecked={true} onClick={(e) => this.ChangeRouteFilter(e,2)}></input>
+                        <span class="checkmark"></span>
+                        </label>
+
+                        <h4>Dölj klara</h4>
+                        <label class="checkbox_container">
+                        <input type="checkbox" defaultChecked={true} onClick={(e) => this.ChangeOmitCompletedPosts(e)}></input>
+                        <span class="checkmark"></span>
+                        </label>
                     </div>
 
                     <div className={"control_bar_fetch"}>

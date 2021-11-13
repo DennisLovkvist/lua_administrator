@@ -24,20 +24,24 @@
     --width-header-dry:1px;
     --padding-top-cell-count:5px;
 
-    --padding-left: 8px;
+    --padding-left: 0px;
 
     --count-input-width:44px;
     --count-input-margin-left:4px; 
     
     --count-input-bg-color: #eeeeee;
 
-    --header-customer-number-width:90px;
-    --header-customer-name-width:100px;
-    --header-status-width:128px;
-    --header-date-width:116px;
-    --header-date-control-width:520px;
+    --header-customer-number-width:80px;
+    --header-customer-name-width:80px;
+    --header-status-width:124px;
+    --header-date-width:110px;
+    --header-date-control-width:590px;
 
-    --cell-complete-width: 1902px; 
+    --cell-complete-width: 1924px; 
+
+    --date-input-width:108px;
+    --date-input-margin-left: 4px;
+    --date-input-margin-right: 18px;
 
 
     --cell-header-store-width: calc(var(--header-customer-number-width) + var(--header-customer-name-width) + var(--header-status-width) + var(--header-date-width)); 
@@ -49,7 +53,7 @@
     display:inline-block;
     width:3000px;
     margin-bottom: -15px;
-    margin-left: -40px;
+    margin-left: -50px;
     
 }
 #banner{
@@ -71,20 +75,90 @@
     width: var(--cell-complete-width);
     height: 48px;
     display:inline-block;
+    
 }
 
 
 
+/*#region Checkbox*/
+.checkbox_container {
+    display: inline-block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    margin-left: 8px;
+  }  
+
+  .checkbox_container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }  
+ 
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 16px;
+    width: 16px;
+    background-color: #eee;
+  }  
+  
+  .checkbox_container:hover input ~ .checkmark {
+    background-color: #ccc;
+  }  
+  
+  .checkbox_container input:checked ~ .checkmark {
+    background-color: var(--color-dry-primary)
+  }
+  
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  .checkbox_container input:checked ~ .checkmark:after {
+    display: block;
+  }
+  
+  .checkbox_container .checkmark:after {
+    left: 5px;
+    top: 2px;
+    width: 2px;
+    height: 7px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+  /*#endregion Checkbox*/
 
 
 
 
-
+.control_bar .control_bar_routes input[type=tel]{
+    display: inline-block;
+    border:none;
+    width: 72px;
+    margin-top: 6px;
+    margin-left: 8px;
+    margin-right: 32px;
+}
 .control_bar .control_bar_routes
 {
     background-color: #aaaaaa!important;    
     height: 32px;
-    width: 520px;    
+    width: 540px;    
     margin-right: 32px;
     margin-left: 32px;
     display:inline-block;
@@ -93,15 +167,10 @@
 }
 .control_bar .control_bar_routes h4 {
     display: inline-block;
-    margin-left: 8px;
+    margin-left: 4px;
     margin-right: 0px;
     font-size: small;
     margin-top: 6px;
-}
-.control_bar .control_bar_routes input{
-    display: inline-block;
-    border:none;
-    width: 72px;
 }
 .control_bar .control_bar_routes button{
     display: inline-block;
@@ -230,14 +299,6 @@
     border:none;
     width: 72px;
     margin-top: 6px;
-}
-
-#checkbox_tumba {
-    display: inline-block;
-    border:none;
-    width: 16px;
-    margin-top: 6px;
-    background-color: #e62acc;
 }
 .control_bar .control_bar_default button{
     display: inline-block;
@@ -672,6 +733,44 @@
     height: var(--height-cell-count);
     
 }
+#cell_date_control button{
+
+    background-color: var(--color-dry-primary);
+    display: inline-block;
+    font: bold 11px Arial;
+    margin-left: 0px;
+    margin-right: 2px;
+    display: inline-block;
+    border:none;
+    width: 24px;
+    height:18px;
+    padding: 4px 6px 4px 6px;
+
+}
+#cell_date_control button:hover{
+
+    background-color: var(--color-dry-secondary);
+
+}
+#cell_date_control button:active{
+
+    background-color: #cfcfcf;
+    border: 1px solid #333333;
+}
+#cell_date_control input{
+
+    width: var(--date-input-width);
+    
+    height:16px;
+    text-align: center;
+    margin-left: var(--date-input-margin-left);
+    /*margin-right: var(--date-input-margin-right);*/
+    background-color: var(--count-input-bg-color);
+    outline: none;
+    border: 0px;  
+    font-size: 13px;
+}
+
 #cell_date_control_add{
 
     background-color: var(--color-global-primary);    
@@ -712,7 +811,7 @@
    padding-left:4px;
    text-align: center;
 }
-
+/*
 #cell_date_control button{
 
     display: inline-block;
@@ -728,13 +827,14 @@
 #cell_date_control button:hover{
 
     background-color: #cfcfcf;
+
 }
 #cell_date_control button:active{
 
     background-color: #cfcfcf;
     border: 1px solid #333333;
 }
-
+*/
 #cell_date{
 
     background-color:var(--color-global-primary);

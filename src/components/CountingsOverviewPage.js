@@ -21,7 +21,9 @@ class CountingsOverviewPage extends Component {
         sort_desc:true,
         current_category:"name",
         mode:"overview",
-        loaded:false
+        loaded:false,
+        statuses_loaded:false,
+        omit_completed_posts:true
       }
   }
 Sort = (category) => {
@@ -59,7 +61,7 @@ componentDidMount(){
 
     this.FetchSource(url_date_string,url_date_string);
 
-    fetch('http://' + process.env.REACT_APP_WEB_SERVER_IP + ':8081/GetStatuses').then(res => res.json()).then(json => {this.setState({ statuses: json,loaded:true})});
+    fetch('http://' + process.env.REACT_APP_WEB_SERVER_IP + ':8081/GetStatuses').then(res => res.json()).then(json => {this.setState({ statuses: json,statuses_loaded:true})});
 
 }
 AddTimeRapport = (counting_control_id,time_rapport_id,date,time) => {
@@ -136,7 +138,6 @@ FetchSource = (date_start,date_end) => {
         .then(res => res.json())
           .then(json => {
             
-            console.log(json);
             var countings_source = [];
 
             for(var i = 0; i < json.length;i++)
@@ -199,15 +200,20 @@ FetchSource = (date_start,date_end) => {
 
               }
 
-              
-
               this.setState(
 
                   { countings_source: countings_source,
-                    countings: countings_source },
+                    countings: countings_source,
+                    loaded: true
+                   },
               )
           });
     
+}
+ChangeOmitCompletedPosts = (value) => {
+
+      this.setState({omit_completed_posts: value});
+      this.Filter(this.state.search_term, true);
 }
 ChangeRouteFilter = (index,value) => {
   
@@ -226,44 +232,56 @@ Filter = (search_term) => {
       for(var i = 0;i < this.state.countings_source.length;i++)
       {
           var match_search = false;
+          var omit = false;
 
-          if(this.state.countings_source[i].customer_name.toLowerCase().match(search_term.toLowerCase()))
+          if(this.state.omit_completed_posts)
           {
-              match_search = true;
+              if(this.state.countings_source[i].status_id == 5)
+              {
+                  omit = true;
+              }
           }
-          else if(this.state.countings_source[i].customer_number.toLowerCase().match(search_term.toLowerCase()))
+
+          if(!omit)
           {
-              match_search = true;
+              if(this.state.countings_source[i].customer_name.toLowerCase().match(search_term.toLowerCase()))
+              {
+                  match_search = true;
+              }
+              else if(this.state.countings_source[i].customer_number.toLowerCase().match(search_term.toLowerCase()))
+              {
+                  match_search = true;
+              }
           }
 
           if(match_search)
           {
-            var flag = false;
-            if(this.state.countings_source[i].route == "T")
-            {
-                if(this.state.route_filters[0])
-                {
-                    flag = true;
-                }
-            }
-            else if(this.state.countings_source[i].route == "A")
-            {
-                if(this.state.route_filters[1])
-                {
-                    flag = true;
-                }
-            }
-            else if(this.state.countings_source[i].route == "E")
-            {
-                if(this.state.route_filters[2])
-                {
-                    flag = true;
-                }
-            }
-            if(flag)
-            {
-              countings.push(this.state.countings_source[i]);
-            }
+              var flag = false;
+              if(this.state.countings_source[i].route == "T")
+              {
+                  if(this.state.route_filters[0])
+                  {
+                      flag = true;
+                  }
+              }
+              else if(this.state.countings_source[i].route == "A")
+              {
+                  if(this.state.route_filters[1])
+                  {
+                      flag = true;
+                  }
+              }
+              else if(this.state.countings_source[i].route == "E")
+              {
+                  if(this.state.route_filters[2])
+                  {
+                      flag = true;
+                  }
+              }
+              if(flag)
+              {
+                countings.push(this.state.countings_source[i]);
+              }
           }
       }
 
@@ -273,6 +291,7 @@ Filter = (search_term) => {
 
       
 }
+//Planned=1;Started=2;Submitted=3;Approved=4;Completed=5;
 ChangeStatus = (counting_control_id,status_id,status_name) => {
  
   var index = -1; 
@@ -403,7 +422,7 @@ render() {
  
     const csvData = this.Export();
   
-    if(this.state.loaded)
+    if(this.state.loaded && this.state.statuses_loaded)
     {
 
         if(this.state.mode == "overview")
@@ -415,7 +434,7 @@ render() {
                 <h1>LUA Administrator</h1>
               </div>
 
-              <ControlBar ChangeRouteFilter={this.ChangeRouteFilter} csvData={csvData} EnterNewCustomerForm={this.EnterNewCustomerForm} Filter={this.Filter} FetchSource={this.FetchSource} ></ControlBar>
+              <ControlBar ChangeOmitCompletedPosts={this.ChangeOmitCompletedPosts} ChangeRouteFilter={this.ChangeRouteFilter} csvData={csvData} EnterNewCustomerForm={this.EnterNewCustomerForm} Filter={this.Filter} FetchSource={this.FetchSource} ></ControlBar>
 
               <CountingListHeader Sort={this.Sort}/>
 

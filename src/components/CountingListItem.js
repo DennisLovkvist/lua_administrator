@@ -10,10 +10,56 @@ class CountingListItem extends Component {
    
     constructor(props) {
         super(props);
+
+
+        
+        
+
+
         this.state = {
             enable_drop_down: false,           
-            counts: this.props.counting.counts       
+            counts: this.props.counting.counts,
+            input_datetime_arrival:this.LoadDateTimeArrival(this.props.counting.time_rapport),
+            input_datetime_loading_start:this.LoadDateTimeLoadingStart(this.props.counting.time_rapport),
+            input_datetime_loading_end:this.LoadDateTimeLoadingEnd(this.props.counting.time_rapport),
+            input_datetime_departure:this.LoadDateTimeDeparture(this.props.counting.time_rapport)
         }
+    }
+    LoadDateTimeArrival = (time_rapport) => {
+        
+        var input_datetime_arrival = new Array();
+        for(var i = 0; i < time_rapport.length;i++)
+        {
+           input_datetime_arrival.push(time_rapport[i].date_arrival + " " + time_rapport[i].time_arrival);
+        }
+        return input_datetime_arrival; 
+    }
+    LoadDateTimeLoadingStart = (time_rapport) => {
+
+        var input_datetime_loading_start = new Array();
+        for(var i = 0; i < time_rapport.length;i++)
+        {
+           input_datetime_loading_start.push(time_rapport[i].date_loading_start + " " + time_rapport[i].time_loading_start);
+        }
+        return input_datetime_loading_start; 
+    }
+    LoadDateTimeLoadingEnd = (time_rapport) => {
+
+        var input_datetime_loading_end = new Array();
+        for(var i = 0; i < time_rapport.length;i++)
+        {
+            input_datetime_loading_end.push(time_rapport[i].date_loading_end + " " + time_rapport[i].time_loading_end);
+        }
+        return input_datetime_loading_end;  
+    }
+    LoadDateTimeDeparture = (time_rapport) => {
+
+        var input_datetime_departure = new Array();
+        for(var i = 0; i < time_rapport.length;i++)
+        {
+           input_datetime_departure.push(time_rapport[i].date_departure + " " + time_rapport[i].time_departure);
+        }
+        return input_datetime_departure;
     }
 
     handleChange = (index,department,pallet_type,event) => {
@@ -35,20 +81,9 @@ class CountingListItem extends Component {
                 this.UpdateCount(index,this.props.counting.counting_control_id,department,pallet_type, parseFloat(count));
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
+        
+        
+        /*
         var n = parseInt(event.target.value);
 
         if(!isNaN(n))
@@ -89,15 +124,108 @@ class CountingListItem extends Component {
           });
             
       }
-    handleChangeDate = (index,department,pallet_type,event) => {
+      ChangeTimeRapport= (id,type,index,event) => {
+              
+        
+        var raw = event.target.value.toString(); 
+
+        var regEx = /^\d{4}-\d{2}-\d{2} \d{2}\:\d{2}$/;
+
+        var validation = raw.match(regEx);
+
 
         
+
+        if(validation)
+        {
+            var date = raw.substring(0,10);
+            var time = raw.substring(11,16);
+
+            console.log("DATE: " + date);
+            console.log("TIME: " + time);
+            switch(type)
+            {
+                case 0:
+                    this.UpdateTimeRapportArrival(id,index,date,time);
+                    break;
+                case 1:
+                    this.UpdateTimeRapportLoadingStart(id,index,date,time);
+                    break;
+                case 2:
+                    this.UpdateTimeRapportLoadingEnd(id,index,date,time);
+                    break;
+                case 3:
+                    this.UpdateTimeRapportDeparture(id,index,date,time);
+                    break;
+            }
+
+        }
+        else
+        {
+            switch(type)
+            {
+                case 0:
+                    this.setState({input_datetime_arrival:raw});
+                    break;
+                case 1:
+                    this.setState({input_datetime_loading_start:raw});
+                    break;
+                case 2:
+                    this.setState({input_datetime_loading_end:raw});
+                    break;
+                case 3:
+                    this.setState({input_datetime_departure:raw});
+                    break;
+            }
+
+            
+        }
+    
     }
+    ValidateTimeRapport = (time_rapport) => {
+        
+        var regex_date = /^\d{4}-\d{2}-\d{2}$/;
+        var regex_time =  /^\d{2}\:\d{2}$/;
+        
+        for(var i = 0;i < time_rapport.length;i++)
+        {
+            if(!time_rapport[i].date_arrival.match(regex_date) || !time_rapport[i].time_arrival.match(regex_time))
+            {
+                return false;
+            }
+            if(!time_rapport[i].date_loading_start.match(regex_date) || !time_rapport[i].time_loading_start.match(regex_time))
+            {
+                return false;
+            }
+            if(!time_rapport[i].date_loading_end.match(regex_date) || !time_rapport[i].time_loading_end.match(regex_time))
+            {
+                return false;
+            }
+            if(!time_rapport[i].date_departure.match(regex_date) || !time_rapport[i].time_departure.match(regex_time))
+            {
+                return false;
+            }
+        }
+
+    }
+    //Planned=1;Started=2;Submitted=3;Approved=4;Completed=5;
     ChangeStatus = (event,status_id,status_name) => {
 
-
-        this.setState({enable_drop_down: !this.state.enable_drop_down});        
-        this.props.ChangeStatus(this.props.counting.counting_control_id,status_id,status_name);
+        var flag = true;
+        if(status_id == 4)
+        {
+            if(!this.ValidateTimeRapport(this.props.counting.time_rapport))
+            {
+                this.setState({enable_drop_down: !this.state.enable_drop_down});  
+                alert("Tidsrapporten måste vara fullständing innan status kan ändras till godkänd.");  
+                return false;
+            }
+        }
+        if(flag)
+        {
+            this.setState({enable_drop_down: !this.state.enable_drop_down});        
+            this.props.ChangeStatus(this.props.counting.counting_control_id,status_id,status_name);
+        }
         
     }
     EnableDropDown = (event) => {
@@ -125,12 +253,13 @@ class CountingListItem extends Component {
 
     }
 
-    UpdateTimeRapportArrival = (time_rapport_id,index) => {
+    UpdateTimeRapportArrival = (time_rapport_id,index,date = "undefined",time = "undefined") => {
 
-        console.log("index:" + index);
-        console.log("hehe" + this.props.counting.time_rapport[1].date_arrival);
-        var date = Common.GetCurrentDateString();
-        var time = Common.GetCurrentTimeString();
+        if(date == "undefined" || time == "undefined")
+        {
+            date = Common.GetCurrentDateString();
+            time = Common.GetCurrentTimeString();
+        }
 
         const request_options = {
             method: 'POST',
@@ -150,17 +279,23 @@ class CountingListItem extends Component {
                     var counting = this.props.counting;
                     counting.time_rapport[index].date_arrival = date;
                     counting.time_rapport[index].time_arrival = time;
-                    this.setState({counting:counting});
+
+                    var input_datetime_arrival = this.state.input_datetime_arrival;
+                    input_datetime_arrival[index] = date + " " + time;
+                    this.setState({counting:counting,input_datetime_arrival:input_datetime_arrival});
                 }
             });
 
             
             console.log(date + " " + time);
     }
-    UpdateTimeRapportLoadingStart = (time_rapport_id,index) => {
+    UpdateTimeRapportLoadingStart = (time_rapport_id,index,date = "undefined",time = "undefined") => {
 
-        var date = Common.GetCurrentDateString();
-        var time = Common.GetCurrentTimeString();
+        if(date == "undefined" || time == "undefined")
+        {
+            date = Common.GetCurrentDateString();
+            time = Common.GetCurrentTimeString();
+        }
 
         const request_options = {
             method: 'POST',
@@ -179,14 +314,20 @@ class CountingListItem extends Component {
                     var counting = this.props.counting;
                     counting.time_rapport[index].date_loading_start = date;
                     counting.time_rapport[index].time_loading_start = time;
-                    this.setState({counting:counting});
+
+                    var input_datetime_loading_start = this.state.input_datetime_loading_start;
+                    input_datetime_loading_start[index] = date + " " + time;
+                    this.setState({counting:counting,input_datetime_loading_start:input_datetime_loading_start});
                 }
             });
     }
-    UpdateTimeRapportLoadingEnd = (time_rapport_id,index) => {
+    UpdateTimeRapportLoadingEnd = (time_rapport_id,index,date = "undefined",time = "undefined") => {
 
-        var date = Common.GetCurrentDateString();
-        var time = Common.GetCurrentTimeString();
+        if(date == "undefined" || time == "undefined")
+        {
+            date = Common.GetCurrentDateString();
+            time = Common.GetCurrentTimeString();
+        }
 
         const request_options = {
             method: 'POST',
@@ -205,14 +346,21 @@ class CountingListItem extends Component {
                     var counting = this.props.counting;
                     counting.time_rapport[index].date_loading_end = date;
                     counting.time_rapport[index].time_loading_end = time;
-                    this.setState({counting:counting});
+
+                    var input_datetime_loading_end = this.state.input_datetime_loading_end;
+                    input_datetime_loading_end[index] = date + " " + time;
+                    this.setState({counting:counting,input_datetime_loading_end:input_datetime_loading_end});
                 }
             });
     }
-    UpdateTimeRapportDeparture = (time_rapport_id,index) => {
+    UpdateTimeRapportDeparture = (time_rapport_id,index,date = "undefined",time = "undefined") => {
 
-        var date = Common.GetCurrentDateString();
-        var time = Common.GetCurrentTimeString();
+        if(date == "undefined" || time == "undefined")
+        {
+            date = Common.GetCurrentDateString();
+            time = Common.GetCurrentTimeString();
+        }
+
         const request_options = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -230,7 +378,10 @@ class CountingListItem extends Component {
                     var counting = this.props.counting;
                     counting.time_rapport[index].date_departure = date;
                     counting.time_rapport[index].time_departure = time;
-                    this.setState({counting:counting});
+                    
+                    var input_datetime_departure = this.state.input_datetime_departure;
+                    input_datetime_departure[index] = date + " " + time;
+                    this.setState({counting:counting,input_datetime_departure:input_datetime_departure});
                 }
             });
     }
@@ -438,6 +589,26 @@ class CountingListItem extends Component {
                     <li id={"cell_count_global"}><input type="tel" onChange={(e) => this.handleChange(15,5,8, e)} value={this.state.counts[15]}/></li>
 
 
+                    <li id={"cell_date_control"}>
+                        <input type="tel" onChange={(e) => this.ChangeTimeRapport(time_rapport_id,0,0, e)} className={"date-tb"} value={this.state.input_datetime_arrival[0]}/>
+                        <button onClick={(e) => this.UpdateTimeRapport(time_rapport_id,0,0)} className={"quick-update-date"}>{"◄"}</button>
+                    </li>
+                    <li id={"cell_date_control"}>
+                        <input type="tel" onChange={(e) => this.ChangeTimeRapport(time_rapport_id,1,0, e)} className={"date-tb"} value={this.state.input_datetime_loading_start[0]}/>
+                        <button onClick={(e) => this.UpdateTimeRapport(time_rapport_id,1,0)} className={"quick-update-date"}>{"◄"}</button>
+                        </li>
+                    <li id={"cell_date_control"}>
+                        <input type="tel" onChange={(e) => this.ChangeTimeRapport(time_rapport_id,2,0, e)} className={"date-tb"} value={this.state.input_datetime_loading_end[0]}/>
+                        <button onClick={(e) => this.UpdateTimeRapport(time_rapport_id,2,0)} className={"quick-update-date"}>{"◄"}</button>
+                        </li>
+                    <li id={"cell_date_control"}>
+                        <input type="tel" onChange={(e) => this.ChangeTimeRapport(time_rapport_id,3,0, e)} className={"date-tb"} value={this.state.input_datetime_departure[0]}/>
+                        <button onClick={(e) => this.UpdateTimeRapport(time_rapport_id,3,0)} className={"quick-update-date"}>{"◄"}</button>
+                        </li>
+
+                     <li id={"cell_date_control_add"}><button onClick={(e) => this.AddTimeRapport(counting_control_id)} className={"add-date"}>{"+"}</button></li>
+
+{/*}
                     <li id={"cell_date_control"}><button onClick={(e) => this.UpdateTimeRapport(time_rapport_id,0,0)} className={"date-btn"}>{datetime_arrival == " " ? "Registrera" : datetime_arrival}</button></li>
                     <li id={"cell_date_control"}><button onClick={(e) => this.UpdateTimeRapport(time_rapport_id,1,0)} className={"date-btn"}>{datetime_loading_start == " " ? "Registrera" : datetime_loading_start}</button></li>
                     <li id={"cell_date_control"}><button onClick={(e) => this.UpdateTimeRapport(time_rapport_id,2,0)} className={"date-btn"}>{datetime_loading_end == " " ? "Registrera" : datetime_loading_end}</button></li>
@@ -446,7 +617,7 @@ class CountingListItem extends Component {
 
 
 
-                    
+            */}
 
                     {
                     
@@ -460,22 +631,39 @@ class CountingListItem extends Component {
                                 <li id={"cell_header_cold_fill"}>&nbsp;</li>
                                 <li id={"cell_header_frozen_fill"}>&nbsp;</li>
                                 <li id={"cell_header_global_fill"}>&nbsp;</li>
-                                <li id={"cell_date_control"}><button onClick={(e) => this.UpdateTimeRapport(item.id,item.type,item.index)} className={"date-btn"}>{item.datetime == " " ? "Registrera" : item.datetime}</button></li>
-                                 </div>
+                                <li id={"cell_date_control"}>
+                            <input type="tel" onChange={(e) => this.ChangeTimeRapport(item.id,item.type,item.index, e)} className={"date-tb"} value={this.state.input_datetime_arrival[item.index]}/>
+                            <button onClick={(e) => this.UpdateTimeRapport(item.id,item.type,item.index)} className={"quick-update-date"}>{"◄"}</button>
+                            </li>  </div>
                             
                         }
-                        if(item.type == 3)
+                        else if(item.type == 1)
+                        {
+                            return <li id={"cell_date_control"}>
+                            <input type="tel" onChange={(e) => this.ChangeTimeRapport(item.id,item.type,item.index, e)} className={"date-tb"} value={this.state.input_datetime_loading_start[item.index]}/>
+                            <button onClick={(e) => this.UpdateTimeRapport(item.id,item.type,item.index)} className={"quick-update-date"}>{"◄"}</button>
+                            </li>  
+                        }
+                        else if(item.type == 2)
+                        {
+                            return <li id={"cell_date_control"}>
+                            <input type="tel" onChange={(e) => this.ChangeTimeRapport(item.id,item.type,item.index, e)} className={"date-tb"} value={this.state.input_datetime_loading_end[item.index]}/>
+                            <button onClick={(e) => this.UpdateTimeRapport(item.id,item.type,item.index)} className={"quick-update-date"}>{"◄"}</button>
+                            </li>  
+                        }
+                        else if(item.type == 3)
                         {
                             return <div>
-                            <li id={"cell_date_control"}><button onClick={(e) => this.UpdateTimeRapport(item.id,item.type,item.index)} className={"date-btn"}>{item.datetime == " " ? "Registrera" : item.datetime}</button></li>
+
+                                
+                            <li id={"cell_date_control"}>
+                            <input type="tel" onChange={(e) => this.ChangeTimeRapport(item.id,item.type,item.index, e)} className={"date-tb"} value={this.state.input_datetime_departure[item.index]}/>
+                            <button onClick={(e) => this.UpdateTimeRapport(item.id,item.type,item.index)} className={"quick-update-date"}>{"◄"}</button>
+                            </li>                              
                             <li id={"cell_date_control_add"}><button onClick={(e) => this.RemoveTimeRapport(counting_control_id,item.id)} className={"add-date"}>{"-"}</button></li>
                             </div>
                         }
-                        else
-                        {
-                            return <li id={"cell_date_control"}><button onClick={(e) => this.UpdateTimeRapport(item.id,item.type,item.index)} className={"date-btn"}>{item.datetime == " " ? "Registrera" : item.datetime}</button></li>
-                                
-                        }
+                        
                     })
                     
                     }
