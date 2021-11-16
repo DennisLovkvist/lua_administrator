@@ -400,8 +400,7 @@
     width: var(--header-status-width);
     text-decoration: underline;  
     background-color: var(--color-primary);
-    color: var(--color-text-dark);
-    
+    color: var(--color-text-dark);   
     padding-left: var(--padding-left);
 }
 #cell_header_customer_name{
@@ -409,51 +408,140 @@
     text-decoration: underline; 
     background-color: var(--color-primary);
     color: var(--color-text-dark);
-    text-align: left;
 }
+
+
 #cell_header_customer_number{
     width: var(--header-customer-number-width);
     text-decoration: underline; 
     background-color: var(--color-primary);
     color: var(--color-text-dark);
-    text-align: center;
 }
 #cell_header_created_date{
     width: var(--header-date-width);
-    text-decoration: underline; 
     background-color: var(--color-primary);
     color: var(--color-text-dark);
-    text-align: center;
+    
+}
+#cell_header_created_date p{
+
+    background-color: var(--color-primary);
+    color: #000000;
+    display:inline;    
+    font-size: 8px;
+    float: left;
+    padding-top: 8px;
+    
 }
 #cell_header_created_date a{
 
+    background-color: var(--color-primary);
     color: #000000;
-    width: var(--header-date-width);
-    padding-left: 0px;
-    padding-right: 0px;
+    display:inline;
+    float: left;
+    text-decoration: underline; 
+    padding-right: 5px;
+}
+#cell_header_created_date a:hover{
+
+    background-color: var(--color-primary);
+    display:inline;    
+    text-decoration: underline; 
 }
 
+
+
+
+#cell_header_status p{
+
+    background-color: var(--color-primary);
+    color: #000000;
+    display:inline;    
+    font-size: 8px;
+    float: left;
+    padding-top: 8px;
+    
+}
 #cell_header_status a{
 
+    background-color: var(--color-primary);
     color: #000000;
-    width: var(--header-status-width);
-    padding-left: 0px;
-    padding-right: 0px;
+    display:inline;
+    float: left;
+    text-decoration: underline; 
+    padding-left: 47px;
+    padding-right: 5px;
+}
+#cell_header_status a:hover{
+
+    background-color: var(--color-primary);
+    display:inline;    
+    text-decoration: underline; 
+}
+
+
+#cell_header_customer_number p{
+
+    background-color: var(--color-primary);
+    color: #000000;
+    display:inline;    
+    font-size: 8px;
+    float: left;   
+    padding-top: 8px;
+    
 }
 #cell_header_customer_number a{
 
+    background-color: var(--color-primary);
     color: #000000;
-    width: var(--header-customer-number-width);
-    padding-left: 0px;
-    padding-right: 0px;
+    display:inline;
+    float: left;
+    text-decoration: underline; 
+    padding-left: 7px;
+    padding-right: 5px;
+}
+#cell_header_customer_number a:hover{
+
+    background-color: var(--color-primary);
+    display:inline;    
+    text-decoration: underline; 
+}
+
+
+
+
+
+
+
+
+#cell_header_customer_name p{
+
+    background-color: var(--color-primary);
+    color: #000000;
+    display:inline;    
+    font-size: 8px;
+    float: left;
+    padding-top: 8px;
+    
 }
 #cell_header_customer_name a{
 
+    background-color: var(--color-primary);
     color: #000000;
-    width: var(--header-customer-name-width);
-    padding-left: 0px;
-    padding-right: 0px;
+    display:inline;
+    float: left;
+    text-decoration: underline; 
+    padding-left: 7px;
+    padding-right: 5px;
 }
+#cell_header_customer_name a:hover{
+
+    background-color: var(--color-primary);
+    display:inline;    
+    text-decoration: underline; 
+}
+
+
 #cell_header_count_dry{
     width: var(--width-cell-count);   
     padding-left:var(--padding-cell-count);

@@ -18,7 +18,7 @@ class ControlBar extends Component {
                 
         this.setState({search_term : event.target.value});  
 
-        this.props.Filter(event.target.value);
+        this.props.Filter(event.target.value,this.props.sort_category,this.props.sort_desc);
     };
     HandleChangeDateStart = (event) => {
                 

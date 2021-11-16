@@ -18,43 +18,15 @@ class CountingsOverviewPage extends Component {
         statuses:[],
         search_term:"",
         route_filters: [true,true,true],
-        sort_desc:true,
-        current_category:"name",
+        sort_desc:false,
+        sort_category:"date",
         mode:"overview",
         loaded:false,
         statuses_loaded:false,
         omit_completed_posts:true
       }
   }
-Sort = (category) => {
 
-  return;
-  this.setState({current_category:category});
-  var countings = this.state.countings.slice();
-
-  var n = (this.state.sort_desc) ? [-1,1]:[1,-1];
-
-  switch(category)
-  {
-      case "number":
-        countings.sort(function(a,b){return (a.customer_number < b.customer_number) ? n[0]:n[1];});
-          break;
-      case "status":
-        countings.sort(function(a,b){return (a.status_id < b.status_id) ? n[0]:n[1];});
-          break;
-      case "date":
-        countings.sort(function(a,b){return (a.created_date < b.created_date) ? n[0]:n[1];});
-          break;
-      case "name":
-        countings.sort(function(a,b){return (a.customer_name.toLowerCase() < b.customer_name.toLowerCase()) ? n[0]:n[1];});
-          break;
-      default:
-        countings.sort(function(a,b){return (a.customer_name.toLowerCase() < b.customer_name.toLowerCase()) ? n[0]:n[1];});
-          break;
-  }
-  
-  this.setState({countings: countings});
-}
 componentDidMount(){
 
     var url_date_string = Common.GetCurrentURLDateString();
@@ -206,14 +178,16 @@ FetchSource = (date_start,date_end) => {
                     countings: countings_source,
                     loaded: true
                    },
-              )
+              );
+
+              this.Filter(this.state.search_term,this.state.sort_category,this.state.sort_desc);
           });
     
 }
 ChangeOmitCompletedPosts = (value) => {
 
       this.setState({omit_completed_posts: value});
-      this.Filter(this.state.search_term, true);
+      this.Filter(this.state.search_term,this.state.sort_category,this.state.sort_desc);
 }
 ChangeRouteFilter = (index,value) => {
   
@@ -222,10 +196,10 @@ ChangeRouteFilter = (index,value) => {
       this.setState({route_filters: route_filters});
       console.log(route_filters);
 
-      this.Filter(this.state.search_term, true);
+      this.Filter(this.state.search_term,this.state.sort_category,this.state.sort_desc);
   
   }
-Filter = (search_term) => {
+Filter = (search_term,sort_category,sort_desc) => {
 
       var countings = [];
 
@@ -285,7 +259,39 @@ Filter = (search_term) => {
           }
       }
 
-      this.setState({countings : countings});  
+      var n = (sort_desc) ? [-1,1]:[1,-1];
+      
+      switch(sort_category)
+      {
+          case "number":
+            countings.sort(function(a,b){return (parseInt(a.customer_number) < parseInt(b.customer_number)) ? n[0]:n[1];});
+              break;
+          case "status":
+            countings.sort(function(a,b){return (a.status_id < b.status_id) ? n[0]:n[1];});
+              break;
+          case "date":
+            countings.sort(function(a,b){
+
+              var date_a = new Date(a.time_rapport[0].date_expected_arrival + " " + a.time_rapport[0].time_expected_arrival).getTime();
+              var date_b = new Date(b.time_rapport[0].date_expected_arrival + " " + b.time_rapport[0].time_expected_arrival).getTime();
+              return date_a > date_b ? n[0]:n[1];        
+            });
+              break;
+          case "name":
+            countings.sort(function(a,b){return (a.customer_name.toLowerCase() < b.customer_name.toLowerCase()) ? n[0]:n[1];});
+              break;
+          default:
+            countings.sort(function(a,b){return (a.customer_name.toLowerCase() < b.customer_name.toLowerCase()) ? n[0]:n[1];});
+              break;
+      }
+
+
+
+      this.setState({countings : countings,
+        search_term:search_term,
+        sort_category:sort_category,
+        sort_desc:sort_desc      
+      });  
     
 
 
@@ -336,8 +342,8 @@ ChangeStatus = (counting_control_id,status_id,status_name) => {
 
         this.setState({ countings_source: countings});
         this.setState({ countings: countings});
-        this.Filter(this.state.search_term);
-        this.Sort(this.state.current_category);
+        this.Filter(this.state.search_term,this.state.sort_category,this.state.sort_desc);
+        this.Sort(this.state.sort_category, this.state.sort_desc);
       }
   });
 
@@ -357,8 +363,7 @@ UpdateCount = (index,counting_control_id, department, pallet_type, value) => {
             var countings_source = this.state.countings_source.slice();
             countings_source[i].counts[index] = value;            
             this.setState({ countings_source: countings_source},)
-            this.Filter(this.state.search_term);
-            this.Sort(this.state.current_category);
+            this.Filter(this.state.search_term,this.state.sort_category,this.state.sort_desc);
 
             const request_options = {
               method: 'POST',
@@ -434,12 +439,9 @@ render() {
                 <h1>LUA Administrator</h1>
               </div>
 
-              <ControlBar ChangeOmitCompletedPosts={this.ChangeOmitCompletedPosts} ChangeRouteFilter={this.ChangeRouteFilter} csvData={csvData} EnterNewCustomerForm={this.EnterNewCustomerForm} Filter={this.Filter} FetchSource={this.FetchSource} ></ControlBar>
+              <ControlBar search_term={this.state.search_term} sort_category={this.state.sort_category} sort_desc={this.state.sort_desc} ChangeOmitCompletedPosts={this.ChangeOmitCompletedPosts} csvData={csvData} EnterNewCustomerForm={this.EnterNewCustomerForm} Filter={this.Filter} FetchSource={this.FetchSource} ChangeRouteFilter={this.ChangeRouteFilter} ></ControlBar>
 
-              <CountingListHeader Sort={this.Sort}/>
-
-              
-
+              <CountingListHeader search_term={this.state.search_term} sort_category={this.state.sort_category} sort_desc={this.state.sort_desc} ChangeSortType={this.ChangeSortType} Filter={this.Filter}/>
 
               <CountingList AddTimeRapport={this.AddTimeRapport} RemoveTimeRapport={this.RemoveTimeRapport} statuses={this.state.statuses} countings={this.state.countings} UpdateCount={this.UpdateCount} ChangeStatus={this.ChangeStatus}/>
             </div>
